@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#090d12" />
+    <meta name="description" content="Huntsville Boxing Club digital scheduling dashboard with live agenda, week/day/month views, and kiosk-ready design." />
+    <title>Huntsville Boxing Club | Digital Calendar</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="dashboard-shell">
+      <aside class="sidebar" aria-label="Huntsville Boxing Club navigation">
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true"><span>H</span><span>B</span></div>
+          <div class="brand-copy">
+            <div class="brand-name">HUNTSVILLE</div>
+            <div class="brand-sub">BOXING CLUB</div>
+          </div>
+        </div>
+
+        <nav class="nav-list">
+          <button class="nav-button active" type="button" data-section="schedule">
+            <span class="nav-icon">▦</span><span>SCHEDULE</span>
+          </button>
+          <button class="nav-button" type="button" data-section="members">
+            <span class="nav-icon">♙</span><span>MEMBERS</span>
+          </button>
+          <button class="nav-button" type="button" data-section="classes">
+            <span class="nav-icon">◯</span><span>CLASSES</span>
+          </button>
+          <button class="nav-button" type="button" data-section="events">
+            <span class="nav-icon">▣</span><span>EVENTS</span>
+          </button>
+          <button class="nav-button" type="button" data-section="announcements">
+            <span class="nav-icon">◖</span><span>ANNOUNCEMENTS</span>
+          </button>
+        </nav>
+
+        <div class="anime-wrap" aria-label="Huntsville Boxing Club anime boxer artwork">
+          <img src="/assets/anime-boxer.png" alt="Anime boxer wearing Huntsville Boxing Club gear" />
+          <div class="anime-edge"></div>
+        </div>
+
+        <div class="sync-state" id="syncState" aria-live="polite">
+          <span class="sync-dot"></span><span>Loading schedule…</span>
+        </div>
+      </aside>
+
+      <main class="main-area">
+        <header class="topbar">
+          <div class="club-values" aria-label="Club values">
+            <span>BOXING</span><span>PEOPLE</span><span>COMMUNITY</span>
+          </div>
+          <div class="clock-block" aria-live="polite">
+            <div class="clock-date" id="clockDate">—</div>
+            <div class="clock-time" id="clockTime">—</div>
+          </div>
+        </header>
+
+        <section class="schedule-layout" id="scheduleSection">
+          <section class="calendar-card" aria-label="Club calendar">
+            <div class="calendar-toolbar">
+              <button class="arrow-button" id="previousButton" type="button" aria-label="Previous period">‹</button>
+              <div class="period-label" id="periodLabel">—</div>
+              <div class="view-switcher" role="group" aria-label="Calendar view">
+                <button type="button" class="view-button active" data-view="week">Week</button>
+                <button type="button" class="view-button" data-view="day">Day</button>
+                <button type="button" class="view-button" data-view="month">Month</button>
+              </div>
+              <button class="arrow-button" id="nextButton" type="button" aria-label="Next period">›</button>
+            </div>
+            <div id="calendarContent" class="calendar-content" aria-live="polite"></div>
+          </section>
+
+          <aside class="right-rail">
+            <section class="rail-card">
+              <div class="rail-heading-row">
+                <h2>TODAY'S AGENDA</h2>
+                <span id="todayLabel">—</span>
+              </div>
+              <div class="live-status" id="liveStatus" hidden></div>
+              <div class="today-list" id="todaySchedule"></div>
+            </section>
+
+            <section class="rail-card events-rail-card">
+              <div class="rail-heading-row">
+                <h2>UPCOMING EVENTS</h2>
+                <button class="text-button" type="button" data-section-jump="events">View All</button>
+              </div>
+              <div class="upcoming-list" id="upcomingEvents"></div>
+            </section>
+          </aside>
+        </section>
+
+        <section class="secondary-screen" id="secondarySection" hidden>
+          <div class="secondary-heading-row">
+            <div>
+              <p class="secondary-eyebrow" id="secondaryEyebrow">HUNTSVILLE BOXING CLUB</p>
+              <h1 id="secondaryTitle">—</h1>
+            </div>
+            <button class="back-to-schedule" id="backToSchedule" type="button">Back to Schedule</button>
+          </div>
+          <div id="secondaryContent"></div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>
