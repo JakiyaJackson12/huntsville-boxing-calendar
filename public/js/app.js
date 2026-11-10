@@ -1,3 +1,4 @@
+import { createBoxerAnimator } from './boxerAnimator.js';
 import { fetchAppConfig, fetchCalendarEvents, readEventCache, saveEventCache } from './api.js';
 import { createRenderer } from './renderer.js';
 import { state } from './state.js';
@@ -19,12 +20,13 @@ const els = {
   clockDate: document.getElementById('clockDate'),
   clockTime: document.getElementById('clockTime'),
   todayLabel: document.getElementById('todayLabel'),
-  todaySchedule: document.getElementById('todaySchedule'),
   upcomingEvents: document.getElementById('upcomingEvents'),
   liveStatus: document.getElementById('liveStatus'),
+  nextStatus: document.getElementById('nextStatus'),
   syncState: document.getElementById('syncState'),
   sectionJumps: [...document.querySelectorAll('[data-section-jump]')],
   animeWrap: document.querySelector('.anime-wrap'),
+  boxerSprite: document.getElementById('boxerSprite'),
 };
 
 const renderer = createRenderer(els);
@@ -96,34 +98,15 @@ function bindInteractions() {
 }
 
 function startBoxerMotion() {
-  if (!els.animeWrap) return;
-
-  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)');
-  if (reducedMotion?.matches) return;
-
-  let timerId;
-  const scheduleNextCombo = (firstRun = false) => {
-    const delay = firstRun ? 5_000 : 12_000 + Math.floor(Math.random() * 7_000);
-    timerId = window.setTimeout(() => {
-      if (document.visibilityState === 'visible') {
-        els.animeWrap.classList.add('is-jabbing');
-        window.setTimeout(() => els.animeWrap?.classList.remove('is-jabbing'), 900);
-      }
-      scheduleNextCombo();
-    }, delay);
-  };
-
-  const stopMotion = () => {
-    if (timerId) window.clearTimeout(timerId);
-    els.animeWrap?.classList.remove('is-jabbing');
-  };
-
-  reducedMotion?.addEventListener?.('change', (event) => {
-    stopMotion();
-    if (!event.matches) scheduleNextCombo(true);
+  const animator = createBoxerAnimator({ stage: els.animeWrap, sprite: els.boxerSprite });
+  animator.start();
+  // Stable hook for the future Coach phone-control bridge. No UI exposes this publicly yet.
+  window.hbcBoxer = Object.freeze({
+    jab: () => animator.jab(),
+    cross: () => animator.cross(),
+    jabCross: () => animator.jabCross(),
   });
-
-  scheduleNextCombo(true);
+  return animator;
 }
 
 function registerOfflineShell() {

@@ -22,22 +22,33 @@ export async function fetchGoogleEvents(from, to) {
   const calendar = createCalendarClient();
   const items = [];
   let pageToken;
+  let pageCount = 0;
 
   do {
-    const response = await calendar.events.list({
-      calendarId: config.calendarId,
-      timeMin: from.toISOString(),
-      timeMax: to.toISOString(),
-      singleEvents: true,
-      orderBy: 'startTime',
-      maxResults: 250,
-      pageToken,
-      timeZone: config.timeZone,
-      showDeleted: false,
-    });
+    pageCount += 1;
+    if (pageCount > 10) throw new Error('Google Calendar returned too many pages.');
 
-    items.push(...(response.data.items || []));
-    pageToken = response.data.nextPageToken || undefined;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10_000);
+
+    try {
+      const response = await calendar.events.list({
+        calendarId: config.calendarId,
+        timeMin: from.toISOString(),
+        timeMax: to.toISOString(),
+        singleEvents: true,
+        orderBy: 'startTime',
+        maxResults: 250,
+        pageToken,
+        timeZone: config.timeZone,
+        showDeleted: false,
+      }, { signal: controller.signal });
+
+      items.push(...(response.data.items || []));
+      pageToken = response.data.nextPageToken || undefined;
+    } finally {
+      clearTimeout(timeout);
+    }
   } while (pageToken);
 
   return items.map(normalizeGoogleEvent).filter((event) => event.start && event.end);

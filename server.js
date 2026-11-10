@@ -27,9 +27,18 @@ app.use(helmet({
       'img-src': ["'self'", 'data:'],
       'connect-src': ["'self'"],
       'font-src': ["'self'", 'data:'],
+      'object-src': ["'none'"],
+      'base-uri': ["'self'"],
+      'form-action': ["'self'"],
+      'frame-ancestors': ["'none'"],
     },
   },
 }));
+app.use((req, res, next) => {
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=()');
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  next();
+});
 app.use(compression());
 app.use(express.json({ limit: '100kb' }));
 app.use(express.static(publicDir, {

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#090d12" />
+    <meta name="theme-color" content="#070b10" />
     <meta name="description" content="Huntsville Boxing Club digital scheduling dashboard with live agenda, week/day/month views, and kiosk-ready design." />
     <title>Huntsville Boxing Club | Digital Calendar</title>
     <link rel="stylesheet" href="/styles.css" />
@@ -12,7 +12,7 @@
     <div class="dashboard-shell">
       <aside class="sidebar" aria-label="Huntsville Boxing Club navigation">
         <div class="brand-lockup">
-          <div class="brand-mark" aria-hidden="true"><span>H</span><span>B</span></div>
+          <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
           <div class="brand-copy">
             <div class="brand-name">HUNTSVILLE</div>
             <div class="brand-sub">BOXING CLUB</div>
@@ -21,25 +21,31 @@
 
         <nav class="nav-list">
           <button class="nav-button active" type="button" data-section="schedule">
-            <span class="nav-icon">▦</span><span>SCHEDULE</span>
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></svg>
+            <span>SCHEDULE</span>
           </button>
           <button class="nav-button" type="button" data-section="members">
-            <span class="nav-icon">♙</span><span>MEMBERS</span>
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span>MEMBERS</span>
           </button>
           <button class="nav-button" type="button" data-section="classes">
-            <span class="nav-icon">◯</span><span>CLASSES</span>
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/></svg>
+            <span>CLASSES</span>
           </button>
           <button class="nav-button" type="button" data-section="events">
-            <span class="nav-icon">▣</span><span>EVENTS</span>
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 9h18M12 12l1.2 2.5 2.8.4-2 2 .5 2.8-2.5-1.3-2.5 1.3.5-2.8-2-2 2.8-.4z"/></svg>
+            <span>EVENTS</span>
           </button>
           <button class="nav-button" type="button" data-section="announcements">
-            <span class="nav-icon">◖</span><span>ANNOUNCEMENTS</span>
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 15-6v14L3 13zM3 11v2M7 14l1.5 6h3L10 13"/></svg>
+            <span>ANNOUNCEMENTS</span>
           </button>
         </nav>
 
-        <div class="anime-wrap" aria-label="Huntsville Boxing Club anime boxer artwork">
-          <img src="/assets/anime-boxer.png" alt="Anime boxer wearing Huntsville Boxing Club gear" />
-          <div class="anime-edge"></div>
+        <div class="anime-wrap" id="boxerStage" aria-label="Animated Huntsville Boxing Club boxer">
+          <div class="anime-streaks" aria-hidden="true"></div>
+          <div class="anime-impact" aria-hidden="true"></div>
+          <img id="boxerSprite" class="boxer-sprite" src="/assets/boxer/idle.webp" alt="Anime boxer wearing Huntsville Boxing Club gear" decoding="async" draggable="false" />
         </div>
 
         <div class="sync-state" id="syncState" aria-live="polite">
@@ -48,9 +54,20 @@
       </aside>
 
       <main class="main-area">
+        <div class="gym-backdrop" aria-hidden="true">
+          <div class="gym-light gym-light-left"></div>
+          <div class="gym-light gym-light-right"></div>
+          <div class="ring-post ring-post-left"></div>
+          <div class="ring-post ring-post-right"></div>
+          <div class="ring-rope ring-rope-one"></div>
+          <div class="ring-rope ring-rope-two"></div>
+          <div class="ring-rope ring-rope-three"></div>
+          <div class="ring-floor"></div>
+        </div>
+
         <header class="topbar">
           <div class="club-values" aria-label="Club values">
-            <span>BOXING</span><span>PEOPLE</span><span>COMMUNITY</span>
+            <span>BOXING</span><i></i><span>FITNESS</span><i></i><span>DISCIPLINE</span><i></i><span>COMMUNITY</span>
           </div>
           <div class="clock-block" aria-live="polite">
             <div class="clock-date" id="clockDate">—</div>
@@ -74,19 +91,25 @@
           </section>
 
           <aside class="right-rail">
-            <section class="rail-card">
-              <div class="rail-heading-row">
-                <h2>TODAY'S AGENDA</h2>
+            <section class="rail-card live-rail-card status-card status-live-card">
+              <div class="status-card-heading">
+                <h2><span class="rail-dot"></span>LIVE NOW</h2>
                 <span id="todayLabel">—</span>
               </div>
               <div class="live-status" id="liveStatus" hidden></div>
-              <div class="today-list" id="todaySchedule"></div>
+            </section>
+
+            <section class="rail-card status-card status-next-card">
+              <div class="status-card-heading">
+                <h2><span class="status-clock-icon" aria-hidden="true"></span>UP NEXT</h2>
+              </div>
+              <div class="next-status-list" id="nextStatus"></div>
             </section>
 
             <section class="rail-card events-rail-card">
               <div class="rail-heading-row">
-                <h2>UPCOMING EVENTS</h2>
-                <button class="text-button" type="button" data-section-jump="events">View All</button>
+                <h2><span class="events-calendar-icon" aria-hidden="true"></span>UPCOMING EVENTS</h2>
+                <button class="text-button" type="button" data-section-jump="events">VIEW ALL</button>
               </div>
               <div class="upcoming-list" id="upcomingEvents"></div>
             </section>

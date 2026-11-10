@@ -46,16 +46,12 @@ export function createRenderer(els) {
     ];
   }
 
-  function getLiveOrNextEvent() {
+  function getLiveAndNextEvents() {
     const now = new Date();
     const todayEvents = getEventsForDay(now).filter((event) => !event.allDay);
-    const live = todayEvents.find((event) => now >= eventStart(event) && now < eventEnd(event));
-    if (live) return { kind: 'live', event: live, detail: `Ends ${formatTime(eventEnd(live))}` };
-
-    const next = todayEvents.find((event) => eventStart(event) > now);
-    if (next) return { kind: 'next', event: next, detail: countdownLabel(eventStart(next), now) };
-
-    return null;
+    const live = todayEvents.find((event) => now >= eventStart(event) && now < eventEnd(event)) || null;
+    const upcoming = todayEvents.filter((event) => eventStart(event) > now);
+    return { live, upcoming, now };
   }
 
   function setSyncState(kind, text) {
@@ -72,42 +68,47 @@ export function createRenderer(els) {
   }
 
   function renderLiveStatus() {
-    const status = getLiveOrNextEvent();
-    if (!status) {
-      els.liveStatus.hidden = true;
-      return;
+    const { live, upcoming, now } = getLiveAndNextEvents();
+
+    if (live) {
+      els.liveStatus.hidden = false;
+      els.liveStatus.className = 'live-status live';
+      els.liveStatus.innerHTML = `
+        <div class="live-primary-copy">
+          <strong>${escapeHtml(live.title)}</strong>
+          <span>${escapeHtml(formatTime(eventStart(live)))} – ${escapeHtml(formatTime(eventEnd(live)))}</span>
+        </div>
+        <span class="live-status-time">${escapeHtml(`Ends ${formatTime(eventEnd(live))}`)}</span>
+      `;
+    } else {
+      els.liveStatus.hidden = false;
+      els.liveStatus.className = 'live-status waiting';
+      els.liveStatus.innerHTML = `
+        <div class="live-primary-copy">
+          <strong>No class live</strong>
+          <span>Schedule is current</span>
+        </div>
+      `;
     }
 
-    els.liveStatus.hidden = false;
-    els.liveStatus.className = `live-status ${status.kind}`;
-    els.liveStatus.innerHTML = `
-      <span class="live-status-dot" aria-hidden="true"></span>
-      <div class="live-status-copy">
-        <span class="live-status-kicker">${status.kind === 'live' ? 'LIVE NOW' : 'UP NEXT'}</span>
-        <strong>${escapeHtml(status.event.title)}</strong>
-      </div>
-      <span class="live-status-time">${escapeHtml(status.detail)}</span>
-    `;
+    if (els.nextStatus) {
+      const nextItems = upcoming.slice(0, 2);
+      els.nextStatus.innerHTML = nextItems.length
+        ? nextItems.map((event, index) => `
+          <article class="next-status-item ${index === 0 ? 'primary' : ''}">
+            <span class="next-status-dot" aria-hidden="true"></span>
+            <div>
+              <strong>${escapeHtml(event.title)}</strong>
+              <span>${escapeHtml(formatTime(eventStart(event)))} – ${escapeHtml(formatTime(eventEnd(event)))}</span>
+            </div>
+            ${index === 0 ? `<em>${escapeHtml(countdownLabel(eventStart(event), now))}</em>` : ''}
+          </article>
+        `).join('')
+        : '<div class="next-empty">No more classes today.</div>';
+    }
   }
 
   function renderTodayRail() {
-    const events = getEventsForDay(new Date()).slice(0, 6);
-    els.todaySchedule.innerHTML = events.length
-      ? events.map((event) => {
-          const tone = eventTone(event);
-          const status = currentStatus(event);
-          return `<article class="agenda-item ${tone === 'gold' ? 'gold' : tone === 'neutral' ? 'neutral' : ''} ${status === 'LIVE NOW' ? 'is-live' : ''}">
-            <div class="agenda-marker"></div>
-            <div>
-              <div class="agenda-time">${event.allDay ? 'ALL DAY' : `${escapeHtml(formatTime(eventStart(event)))} – ${escapeHtml(formatTime(eventEnd(event)))}`}</div>
-              <div class="agenda-title">${escapeHtml(event.title)}</div>
-              <div class="agenda-sub">${escapeHtml(event.description || event.location || 'Huntsville Boxing Club')}</div>
-              ${status ? `<div class="agenda-status">${status}</div>` : ''}
-            </div>
-          </article>`;
-        }).join('')
-      : '<div class="empty-state">No classes scheduled today.</div>';
-
     const featured = getFeaturedEvents().slice(0, 4);
     els.upcomingEvents.innerHTML = featured.length
       ? featured.map((event, index) => {
@@ -173,8 +174,10 @@ export function createRenderer(els) {
 
       return `<section class="week-agenda-day ${isToday ? 'today' : ''}">
         <header class="week-agenda-header">
-          <span class="week-agenda-name">${escapeHtml(formatDate(day, { weekday: 'short' }).toUpperCase())}</span>
-          <span class="week-agenda-date">${escapeHtml(formatDate(day, { day: 'numeric' }))}</span>
+          <div class="week-agenda-heading-copy">
+            <span class="week-agenda-name">${escapeHtml(formatDate(day, { weekday: 'short' }))}</span>
+            <span class="week-agenda-date">${escapeHtml(formatDate(day, { month: 'short', day: 'numeric' }))}</span>
+          </div>
           ${isToday ? '<span class="week-today-badge">TODAY</span>' : ''}
         </header>
         <div class="week-agenda-events">${eventCards}</div>

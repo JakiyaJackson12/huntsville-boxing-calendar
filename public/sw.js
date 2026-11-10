@@ -1,13 +1,22 @@
-const CACHE_NAME = 'hbc-app-shell-v3';
+const CACHE_NAME = 'hbc-app-shell-v10';
 const APP_SHELL = [
   '/',
   '/styles.css',
   '/js/app.js',
+  '/js/boxerAnimator.js',
   '/js/api.js',
   '/js/renderer.js',
   '/js/state.js',
   '/js/utils.js',
-  '/assets/anime-boxer.png',
+  '/assets/boxer/idle.webp',
+  '/assets/boxer/blink.webp',
+  '/assets/boxer/jab-ready.webp',
+  '/assets/boxer/jab.webp',
+  '/assets/boxer/guard.webp',
+  '/assets/boxer/cross-ready.webp',
+  '/assets/boxer/cross.webp',
+  '/assets/boxer/reset.webp',
+  '/assets/gym-reference.webp',
 ];
 
 self.addEventListener('install', (event) => {

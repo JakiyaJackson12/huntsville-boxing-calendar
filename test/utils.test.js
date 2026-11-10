@@ -5,7 +5,7 @@ import { formatWeekRange } from '../public/js/utils.js';
 test('formatWeekRange produces a clean same-month label', () => {
   const start = new Date('2026-10-12T12:00:00-05:00');
   const end = new Date('2026-10-18T12:00:00-05:00');
-  assert.equal(formatWeekRange(start, end), 'October 12 – 18, 2026');
+  assert.equal(formatWeekRange(start, end), 'Oct 12 – Oct 18, 2026');
 });
 
 test('formatWeekRange handles a cross-month week', () => {

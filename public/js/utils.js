@@ -15,7 +15,6 @@ export const formatDate = (date, options) => new Intl.DateTimeFormat('en-US', {
 export const formatTime = (date) => formatDate(date, { hour: 'numeric', minute: '2-digit' });
 
 export function formatWeekRange(start, end) {
-  const startMonth = formatDate(start, { month: 'long' });
   const startMonthShort = formatDate(start, { month: 'short' });
   const startDay = formatDate(start, { day: 'numeric' });
   const endMonthShort = formatDate(end, { month: 'short' });
@@ -23,7 +22,7 @@ export function formatWeekRange(start, end) {
   const endYear = formatDate(end, { year: 'numeric' });
 
   if (start.getFullYear() === end.getFullYear() && start.getMonth() === end.getMonth()) {
-    return `${startMonth} ${startDay} – ${endDay}, ${endYear}`;
+    return `${startMonthShort} ${startDay} – ${endMonthShort} ${endDay}, ${endYear}`;
   }
 
   return `${startMonthShort} ${startDay} – ${endMonthShort} ${endDay}, ${endYear}`;

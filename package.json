@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "node --watch server.js",
     "start": "node server.js",
-    "check": "node --check server.js && node --check src/config.js && node --check src/dateRange.js && node --check src/calendarEvent.js && node --check src/demoEvents.js && node --check src/googleCalendar.js && node --check public/js/state.js && node --check public/js/utils.js && node --check public/js/api.js && node --check public/js/renderer.js && node --check public/js/app.js && node --check public/sw.js",
+    "check": "node --check server.js && node --check src/config.js && node --check src/dateRange.js && node --check src/calendarEvent.js && node --check src/demoEvents.js && node --check src/googleCalendar.js && node --check public/js/state.js && node --check public/js/utils.js && node --check public/js/api.js && node --check public/js/boxerAnimator.js && node --check public/js/renderer.js && node --check public/js/app.js && node --check public/sw.js",
     "test": "node --test test/*.test.js",
     "ci": "npm run check && npm test"
   },
