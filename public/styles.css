@@ -830,3 +830,17 @@ body { text-rendering: geometricPrecision; }
   .boxer-sprite { left: 119px; width: 212px; bottom: -104px; }
   .anime-streaks { width: 230px; height: 205px; bottom: 23px; }
 }
+
+/* Keep the boxer visible when secondary sections extend beyond the viewport.
+   The desktop sidebar is a viewport-height sticky rail, not the full page height. */
+@media (min-width: 981px) {
+  .dashboard-shell { align-items: start; }
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    min-height: 100vh;
+    align-self: start;
+    overflow: hidden;
+  }
+}
