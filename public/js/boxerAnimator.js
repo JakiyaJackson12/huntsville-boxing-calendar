@@ -76,7 +76,7 @@ export function createBoxerAnimator({ stage, sprite }) {
   };
 
   const jab = () => runSequence('jab', [
-    ['guard', 260],
+    ['guard', 145],
     ['jabReady', 85],
     ['jab', 115],
     ['jabReady', 90],
@@ -94,7 +94,7 @@ export function createBoxerAnimator({ stage, sprite }) {
   ]);
 
   const jabCross = () => runSequence('jab-cross', [
-    ['guard', 300],
+    ['guard', 145],
     ['jabReady', 82],
     ['jab', 110],
     ['jabReady', 82],
@@ -120,7 +120,7 @@ export function createBoxerAnimator({ stage, sprite }) {
 
   const scheduleCombo = (first = false) => {
     if (stopped || reducedMotion?.matches) return;
-    const delay = first ? randomBetween(7500, 10500) : randomBetween(14000, 26000);
+    const delay = first ? randomBetween(450, 800) : randomBetween(6000, 9500);
     comboTimer = window.setTimeout(async () => {
       if (!busy && !stopped && document.visibilityState === 'visible') {
         const roll = Math.random();
