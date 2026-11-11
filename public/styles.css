@@ -865,3 +865,19 @@ body { text-rendering: geometricPrecision; }
   .anime-wrap { height: min(465px, calc(100vh - 450px)); min-height: 300px; }
   .boxer-sprite { width: 292px; left: 50%; bottom: -76px; }
 }
+
+/* Full-head visibility fix: keep the boxer prominent, never crop him at the
+   animation stage boundary. Sidebar remains the outer viewport boundary. */
+@media (min-width: 981px) {
+  .anime-wrap { overflow: visible; }
+  .boxer-sprite {
+    width: min(310px, 100%);
+    bottom: -95px;
+  }
+}
+@media (min-width: 981px) and (max-width: 1399px) {
+  .boxer-sprite {
+    width: min(265px, 100%);
+    bottom: -85px;
+  }
+}
