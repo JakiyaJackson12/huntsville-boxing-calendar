@@ -881,3 +881,15 @@ body { text-rendering: geometricPrecision; }
     bottom: -85px;
   }
 }
+
+/* Full-head iPad/kiosk correction, sized against the actual 313 x 627 boxer image.
+   The visible hair starts ~80 px below the image's transparent top edge.
+   Pull the tall image down INSIDE the stage; crop lower legs, never the face. */
+@media (min-width: 981px) {
+  .anime-wrap { overflow: hidden; }
+  .boxer-sprite { width: min(295px, 100%); left: 50%; bottom: -145px; }
+}
+@media (min-width: 981px) and (max-width: 1399px) {
+  .anime-wrap { height: 300px; min-height: 300px; bottom: 27px; }
+  .boxer-sprite { width: 265px; left: 50%; bottom: -185px; }
+}
