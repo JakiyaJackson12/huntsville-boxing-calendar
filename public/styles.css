@@ -820,19 +820,10 @@ body { text-rendering: geometricPrecision; }
 .club-values { opacity: .92; letter-spacing: .245em; }
 .clock-time { text-shadow: 0 8px 22px rgba(0,0,0,.34); }
 
-@media (min-width: 1700px) and (min-height: 900px) {
-  .anime-wrap { width: 306px; height: 470px; bottom: 31px; }
-  .boxer-sprite { left: 153px; width: 276px; bottom: -132px; }
-}
-
-@media (min-width: 981px) and (max-width: 1399px) {
-  .anime-wrap { width: 238px; height: 374px; bottom: 27px; }
-  .boxer-sprite { left: 119px; width: 212px; bottom: -104px; }
-  .anime-streaks { width: 230px; height: 205px; bottom: 23px; }
-}
-
-/* Keep the boxer visible when secondary sections extend beyond the viewport.
-   The desktop sidebar is a viewport-height sticky rail, not the full page height. */
+/* Consistent boxer on iPad landscape, MacBook, and gym screens.
+   Keep one image width instead of competing responsive widths.
+   Original boxer image aspect ratio: 313 x 627; hair is inset at the top.
+   Show full hair, face, gloves and torso; crop only the lower legs. */
 @media (min-width: 981px) {
   .dashboard-shell { align-items: start; }
   .sidebar {
@@ -843,53 +834,25 @@ body { text-rendering: geometricPrecision; }
     align-self: start;
     overflow: hidden;
   }
-}
-
-/* Nov 11: give the approved boxer a stronger lower-left presence on kiosks and iPads.
-   Keep the sticky sidebar, nav controls and calendar unobstructed. */
-@media (min-width: 981px) {
   .anime-wrap {
+    position: absolute;
     left: 0;
+    right: 0;
     bottom: 26px;
     width: 100%;
-    height: min(490px, calc(100vh - 480px));
-    min-height: 300px;
+    height: 430px;
+    min-height: 430px;
+    max-height: 430px;
+    overflow: hidden;
+    pointer-events: none;
   }
   .boxer-sprite {
+    position: absolute;
     left: 50%;
-    width: min(350px, 115%);
-    bottom: -77px;
+    width: 260px;
+    min-width: 260px;
+    max-width: none;
+    height: auto;
+    bottom: -90px;
   }
-}
-@media (min-width: 981px) and (max-width: 1399px) {
-  .anime-wrap { height: min(465px, calc(100vh - 450px)); min-height: 300px; }
-  .boxer-sprite { width: 292px; left: 50%; bottom: -76px; }
-}
-
-/* Full-head visibility fix: keep the boxer prominent, never crop him at the
-   animation stage boundary. Sidebar remains the outer viewport boundary. */
-@media (min-width: 981px) {
-  .anime-wrap { overflow: visible; }
-  .boxer-sprite {
-    width: min(310px, 100%);
-    bottom: -95px;
-  }
-}
-@media (min-width: 981px) and (max-width: 1399px) {
-  .boxer-sprite {
-    width: min(265px, 100%);
-    bottom: -85px;
-  }
-}
-
-/* Full-head iPad/kiosk correction, sized against the actual 313 x 627 boxer image.
-   The visible hair starts ~80 px below the image's transparent top edge.
-   Pull the tall image down INSIDE the stage; crop lower legs, never the face. */
-@media (min-width: 981px) {
-  .anime-wrap { overflow: hidden; }
-  .boxer-sprite { width: min(295px, 100%); left: 50%; bottom: -145px; }
-}
-@media (min-width: 981px) and (max-width: 1399px) {
-  .anime-wrap { height: 300px; min-height: 300px; bottom: 27px; }
-  .boxer-sprite { width: 265px; left: 50%; bottom: -185px; }
 }
