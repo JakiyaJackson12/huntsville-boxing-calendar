@@ -844,3 +844,24 @@ body { text-rendering: geometricPrecision; }
     overflow: hidden;
   }
 }
+
+/* Nov 11: give the approved boxer a stronger lower-left presence on kiosks and iPads.
+   Keep the sticky sidebar, nav controls and calendar unobstructed. */
+@media (min-width: 981px) {
+  .anime-wrap {
+    left: 0;
+    bottom: 26px;
+    width: 100%;
+    height: min(490px, calc(100vh - 480px));
+    min-height: 300px;
+  }
+  .boxer-sprite {
+    left: 50%;
+    width: min(350px, 115%);
+    bottom: -77px;
+  }
+}
+@media (min-width: 981px) and (max-width: 1399px) {
+  .anime-wrap { height: min(465px, calc(100vh - 450px)); min-height: 300px; }
+  .boxer-sprite { width: 292px; left: 50%; bottom: -76px; }
+}
